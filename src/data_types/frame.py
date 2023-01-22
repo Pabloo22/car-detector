@@ -34,6 +34,8 @@ class Frame:
                        rectangle: Rectangle,
                        color: Color = (0, 255, 0),
                        thickness: int = 2):
+        """Draws the rectangle on the frame
+        """
         x, y, w, h = rectangle
         cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)
 
