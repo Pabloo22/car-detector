@@ -20,8 +20,8 @@ class App:
 
             cars_rectangles = self.car_detector.detect(frame.image)
             tracker = Tracker(self.action_zone)
-            cars_in_action_zone = tracker.rectangles_in_action_zone(cars_rectangles)
 
+            cars_in_action_zone = tracker.rectangles_in_action_zone(cars_rectangles)
             frame.draw_rectangles(cars_in_action_zone)
             frame.draw_rectangle(self.action_zone, color=(0, 255, 0))
 

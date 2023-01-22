@@ -9,18 +9,6 @@ from .types import Point, Color, Rectangle
 
 @dataclass
 class Frame:
-    """A frame of a video.
-
-    Args:
-        image: the image of the frame
-
-    Examples:
-        >>> frame = Frame(np.zeros((100, 100, 3), np.uint8))
-        >>> frame.height
-        100
-        >>> frame.width
-        100
-    """
 
     image: np.ndarray
     width: int = field(init=False)
@@ -31,29 +19,29 @@ class Frame:
 
     def draw_rectangles(self,
                         rectangles: List[Rectangle],
-                        color: Color = (0, 255, 0),
+                        color: Color = (205, 255, 0),
                         thickness: int = 2):
         """Draws the rectangles on the frame.
 
-        Args:
-            rectangles: the rectangles to draw
-            color: the color of the rectangles. Defaults to (0, 255, 0) (green).
-            thickness: the thickness of the rectangles. Defaults to 2.
+                Args:
+                    rectangles: the rectangles to draw
+                    color: the color of the rectangles. Defaults to (205, 255, 0) (blue).
+                    thickness: the thickness of the rectangles. Defaults to 2.
         """
         for rectangle in rectangles:
-            _, x, y, w, h = rectangle
+            x, y, w, h = rectangle
             cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)
 
     def draw_rectangle(self,
                        rectangle: Rectangle,
                        color: Color = (0, 255, 0),
-                       thickness: int = 2):
+                       thickness: int = 1):
         """Draws the rectangle on the frame.
 
         Args:
             rectangle: the rectangle to draw
             color: the color of the rectangle. Defaults to (0, 255, 0) (green).
-            thickness: the thickness of the rectangle. Defaults to 2.
+            thickness: the thickness of the rectangle. Defaults to 1.
         """
         x, y, w, h = rectangle
         cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)

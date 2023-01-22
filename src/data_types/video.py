@@ -1,5 +1,5 @@
 from typing import List, Tuple
-
+import time
 import cv2
 
 from .frame import Frame
@@ -29,13 +29,14 @@ class Video:
 
     def save(self, path: str) -> None:
         self.create_video(self.frames, path, self.fps, self.size)
-
     def visualize(self) -> None:
         for frame in self.frames:
-            cv2.imshow("frame", frame)
+            time.sleep((1/self.fps) - 0.021)
+            cv2.imshow("frame", frame.image)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         cv2.destroyAllWindows()
+
 
     @staticmethod
     def create_video(frames: List[Frame], path: str, fps: int, size: Tuple[int, int] = None) -> None:

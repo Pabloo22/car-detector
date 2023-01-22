@@ -1,6 +1,6 @@
 from typing import List
 
-from src.data_types import Rectangle, Rectangle
+from src.data_types import Rectangle
 
 
 class Tracker:
@@ -11,7 +11,7 @@ class Tracker:
         self.frame_counter = 0
         self.car_counter = 0
 
-    def rectangles_in_action_zone(self, rectangles: List[LabeledRectangle]) -> List[LabeledRectangle]:
+    def rectangles_in_action_zone(self, rectangles: List[Rectangle]) -> List[Rectangle]:
         rectangles = [rectangle for rectangle in rectangles if self._rectangle_in_action_zone(rectangle)]
         return rectangles
 
