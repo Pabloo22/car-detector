@@ -1,2 +1,2 @@
-from .app import App
+from .processor import Processor
 from .tracker import Tracker
