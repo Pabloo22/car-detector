@@ -1,6 +1,7 @@
 from typing import List
 
 import cv2
+from copy import deepcopy
 import numpy as np
 
 from . import CarDetector
@@ -20,7 +21,7 @@ class ClassicDetector(CarDetector):
 
     def detect(self, frame: Frame) -> List[LabeledRectangle]:
         rectangles = self._detect(self.last_frame, frame) if self.last_frame is not None else []
-        self.last_frame = frame
+        self.last_frame = deepcopy(frame)
         return rectangles
 
     def _detect(self, frame1, frame2):
