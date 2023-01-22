@@ -1,3 +1,3 @@
-from .frame import Frame, LabeledRectangle
+from .frame import Frame
 from .video import Video
-from .types import Rectangle
+from .types import Point, Color, Rectangle

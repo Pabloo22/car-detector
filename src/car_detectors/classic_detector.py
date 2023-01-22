@@ -5,7 +5,7 @@ from copy import deepcopy
 import numpy as np
 
 from . import CarDetector
-from src.data_types import Frame, LabeledRectangle
+from src.data_types import Frame, Rectangle
 
 
 class ClassicDetector(CarDetector):
@@ -19,7 +19,7 @@ class ClassicDetector(CarDetector):
         self.min_area = min_area
         self.last_frame = None
 
-    def detect(self, frame: Frame) -> List[LabeledRectangle]:
+    def detect(self, frame: Frame) -> List[Rectangle]:
         rectangles = self._detect(self.last_frame, frame) if self.last_frame is not None else []
         self.last_frame = deepcopy(frame)
         return rectangles
@@ -39,5 +39,5 @@ class ClassicDetector(CarDetector):
             x, y, w, h = cv2.boundingRect(contour)
             if cv2.contourArea(contour) < self.min_area:
                 continue
-            rectangles.append(LabeledRectangle("car", x, y, w, h))
+            rectangles.append(Rectangle(x, y, w, h, label="car"))
         return rectangles

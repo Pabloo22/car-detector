@@ -1,6 +1,6 @@
 from typing import List
 
-from src.data_types import Frame, LabeledRectangle, Rectangle
+from src.data_types import Rectangle, Rectangle
 
 
 class Tracker:
@@ -15,6 +15,6 @@ class Tracker:
         rectangles = [rectangle for rectangle in rectangles if self._rectangle_in_action_zone(rectangle)]
         return rectangles
 
-    def _rectangle_in_action_zone(self, rectangle: LabeledRectangle) -> bool:
-        _, x, y, w, h = rectangle
-        return (x, y) in self.action_zone or (x + w, y + h) in self.action_zone
+    def _rectangle_in_action_zone(self, rectangle: Rectangle) -> bool:
+        x, y, w, h = rectangle
+        return (x, y) in self.action_zone and (x + w, y + h) in self.action_zone
