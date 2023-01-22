@@ -13,6 +13,7 @@ class Tracker:
 
     def rectangles_in_action_zone(self, rectangles: List[Rectangle]) -> List[Rectangle]:
         rectangles = [rectangle for rectangle in rectangles if self._rectangle_in_action_zone(rectangle)]
+        self.tracked_objects.extend(rectangles)
         return rectangles
 
     def _rectangle_in_action_zone(self, rectangle: Rectangle) -> bool:
