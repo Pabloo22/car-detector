@@ -17,4 +17,4 @@ class Tracker:
 
     def _rectangle_in_action_zone(self, rectangle: LabeledRectangle) -> bool:
         _, x, y, w, h = rectangle
-        return (x, y) in self.action_zone or (x + w, y + h) in self.action_zone
+        return (x, y) in self.action_zone and (x + w, y + h) in self.action_zone

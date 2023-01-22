@@ -15,7 +15,7 @@ class ClassicDetector(CarDetector):
         min_area: minimum area of a rectangle to be considered a car
     """
 
-    def __init__(self, min_area: int = 25):
+    def __init__(self, min_area: int = 20):
         self.min_area = min_area
         self.last_frame = None
 

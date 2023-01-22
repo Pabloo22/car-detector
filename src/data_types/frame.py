@@ -24,8 +24,8 @@ class Frame:
 
     def draw_rectangles(self,
                         rectangles: List[LabeledRectangle],
-                        color: Color = (0, 255, 0),
-                        thickness: int = 2):
+                        color: Color = (205, 255, 0),
+                        thickness: int = 1):
         for rectangle in rectangles:
             _, x, y, w, h = rectangle
             cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)
@@ -33,7 +33,7 @@ class Frame:
     def draw_rectangle(self,
                        rectangle: Rectangle,
                        color: Color = (0, 255, 0),
-                       thickness: int = 2):
+                       thickness: int = 1):
         """Draws the rectangle on the frame
         """
         x, y, w, h = rectangle
