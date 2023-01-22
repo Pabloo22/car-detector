@@ -28,8 +28,11 @@ class Video:
         self.video_capture.release()
 
     def save(self, path: str) -> None:
+        """Saves the video to the given path."""
         self.create_video(self.frames, path, self.fps, self.size)
+
     def visualize(self) -> None:
+        """Visualizes the video."""
         for frame in self.frames:
             time.sleep((1/self.fps) - 0.021)
             cv2.imshow("frame", frame.image)
@@ -37,9 +40,16 @@ class Video:
                 break
         cv2.destroyAllWindows()
 
-
     @staticmethod
     def create_video(frames: List[Frame], path: str, fps: int, size: Tuple[int, int] = None) -> None:
+        """Creates a video from the frames.
+
+        Args:
+            frames: the frames to create the video from
+            path: the path to save the video
+            fps: the frames per second of the video
+            size: the size of the video. Defaults to None.
+        """
         size = size if size is not None else (frames[0].width, frames[0].height)
         fourcc = cv2.VideoWriter_fourcc(*"MJPG")
         out = cv2.VideoWriter(path, fourcc, fps, size)
