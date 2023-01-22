@@ -51,7 +51,7 @@ class Rectangle:
     def __iter__(self):
         return iter((self.x, self.y, self.width, self.height))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int):
         return (self.x, self.y, self.width, self.height)[key]
 
     def __len__(self):
