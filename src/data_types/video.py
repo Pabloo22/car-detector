@@ -33,7 +33,7 @@ class Video:
         for frame in self.frames:
             time.sleep((1/self.fps) - 0.021)
             cv2.imshow("frame", frame.image)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
+            if cv2.waitKey(1) & 0xFF == ord("x"):
                 break
         cv2.destroyAllWindows()
 
