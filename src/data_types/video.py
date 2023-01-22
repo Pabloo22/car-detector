@@ -11,7 +11,7 @@ class Video:
         self.path = path
         self.video_capture: cv2.VideoCapture = cv2.VideoCapture(path)
         self.fps = self.video_capture.get(cv2.CAP_PROP_FPS)
-        self.frames = None
+        self.frames: List[Frame] = None
         self.frame_width = int(self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.size = (self.frame_width, self.frame_height)
@@ -43,8 +43,9 @@ class Video:
         fourcc = cv2.VideoWriter_fourcc(*"MJPG")
         out = cv2.VideoWriter(path, fourcc, fps, size)
         for frame in frames:
-            out.write(frame)
+            out.write(frame.image)
         out.release()
 
     def __iter__(self):
-        return iter(self.frames)
+        for frame in self.frames:
+            yield frame

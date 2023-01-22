@@ -8,6 +8,11 @@ from src.data_types import Frame, LabeledRectangle
 
 
 class ClassicDetector(CarDetector):
+    """Classical car detector based on difference between two frames
+
+    Args:
+        min_area: minimum area of a rectangle to be considered a car
+    """
 
     def __init__(self, min_area: int = 25):
         self.min_area = min_area
