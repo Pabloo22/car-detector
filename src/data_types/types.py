@@ -18,7 +18,6 @@ class Rectangle:
         height: height of the rectangle
         label: label of the rectangle
 
-
     Examples:
         >>> rectangle = Rectangle(0, 0, 100, 100)
         >>> rectangle.x

@@ -13,6 +13,11 @@ class App:
         self.action_zone = action_zone
 
     def process_video(self, video_path: str) -> Video:
+        """Processes video and returns new video with detected cars.
+
+        Args:
+            video_path: the path to the video to process
+        """
         video = Video(video_path)
         for frame in video:
             if self.action_zone is None:
