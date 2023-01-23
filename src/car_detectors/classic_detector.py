@@ -20,7 +20,7 @@ class ClassicDetector(CarDetector):
         self.last_frame = None
 
     def detect(self, frame: Frame) -> List[Rectangle]:
-        rectangles = self._detect(self.last_frame, frame) if self.last_frame is not None else []
+        rectangles = self._detect(self.last_frame.image, frame.image) if self.last_frame is not None else []
         self.last_frame = deepcopy(frame)
         return rectangles
 

@@ -1,5 +1,7 @@
 from typing import Tuple, Optional
 
+import tqdm
+
 from src.car_detectors.car_detector import CarDetector
 from src.data_types import Video, Rectangle
 from src.tracker import Tracker
@@ -29,20 +31,22 @@ class Processor:
             video_path: the path to the video to process
         """
         video = Video(video_path)
-        for frame in video:
+        print()
+        for frame in tqdm.tqdm(video.frames, desc="Processing video", unit="frame"):
             if self.action_zone is None:
-                self.action_zone = Rectangle(0, 0, frame.width, frame.height - 125)
+                self.action_zone = Rectangle(0, 125, frame.width, frame.height - 125)
             if isinstance(self.action_zone, tuple):
                 x, y, w, h = self.action_zone
                 w = w if w is not None else frame.width - x
                 h = h if h is not None else frame.height - y
                 self.action_zone = Rectangle(x, y, w, h)
 
-            cars_rectangles = self.car_detector.detect(frame.image)
+            cars_rectangles = self.car_detector.detect(frame)
             tracker = Tracker(self.action_zone)
 
             cars_in_action_zone = tracker.rectangles_in_action_zone(cars_rectangles)
-            frame.draw_rectangles(cars_in_action_zone)
+            frame.draw_rectangles([car_in_action_zone for car_in_action_zone in cars_in_action_zone
+                                   if "car" in car_in_action_zone.label])
             frame.draw_rectangle(self.action_zone, color=(0, 255, 0))
 
             frame.draw_text(f"Car counter: {len(cars_in_action_zone)}", (70, 20))

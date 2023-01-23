@@ -36,7 +36,7 @@ class Video:
         for frame in self.frames:
             time.sleep((1/self.fps) - 0.021)
             cv2.imshow("frame", frame.image)
-            if cv2.waitKey(1) & 0xFF == ord("x"):
+            if cv2.waitKey(1) & 0xFF == ord("x") or cv2.getWindowProperty("frame", cv2.WND_PROP_VISIBLE) < 1:
                 break
         cv2.destroyAllWindows()
 
@@ -58,5 +58,7 @@ class Video:
         out.release()
 
     def __iter__(self):
-        for frame in self.frames:
-            yield frame
+        return iter(self.frames)
+
+    def __len__(self):
+        return len(self.frames)

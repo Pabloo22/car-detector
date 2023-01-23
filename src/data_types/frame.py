@@ -75,3 +75,11 @@ class Frame:
             thickness: the thickness of the line. Defaults to 2.
         """
         cv2.line(self.image, start, end, color, thickness)
+
+    def save(self, path: str):
+        cv2.imwrite(path, self.image)
+
+    def show(self, title: str = 'Frame'):
+        cv2.imshow(title, self.image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
