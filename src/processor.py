@@ -22,7 +22,8 @@ class Processor:
     def __init__(self,
                  car_detector: CarDetector,
                  video_path: str,
-                 action_zone: Optional[Union[Tuple[int, int, Optional[int], Optional[int]], Rectangle]] = None):
+                 action_zone: Optional[Union[Tuple[int, int, Optional[int], Optional[int]], Rectangle]] = None,
+                 tol: Union[float, int] = 10):
         self.car_detector = car_detector
         self.video = Video(video_path)
         self.action_zone = action_zone
@@ -35,7 +36,7 @@ class Processor:
             h = h if h is not None else self.video.frame_height - y
             self.action_zone = Rectangle(x, y, w, h)
 
-        self.tracker = Tracker(self.action_zone)
+        self.tracker = Tracker(tol=tol)
 
     def _set_action_zone(self, video_dim: Tuple[int, int]):
         if self.action_zone is None:
@@ -50,7 +51,7 @@ class Processor:
         frame.draw_rectangles([car_in_action_zone for car_in_action_zone in cars_in_action_zone
                                if "car" in car_in_action_zone.label])
         frame.draw_rectangle(self.action_zone, color=(0, 255, 0))
-        frame.draw_text(f"Car counter: {len(cars_in_action_zone)}", (70, 20))
+        frame.draw_text(f"Car counter: {self.tracker.car_counter}", (70, 20))
 
         for trace in traces:
             points = [rectangle.center for rectangle in trace]

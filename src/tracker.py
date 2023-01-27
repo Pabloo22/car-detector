@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Tuple, Union, Dict, Set
+
+from collections import defaultdict
 
 from src.data_structures import Rectangle
 
@@ -6,58 +8,42 @@ from src.data_structures import Rectangle
 class Tracker:
     """This class keeps track of the objects that are in the action zone."""
 
-    def __init__(self, action_zone: Rectangle, tol=10):
-        self.action_zone = action_zone
-        self.tracked_objects = []
-        self.frame_counter = 0
-        self.car_counter = 0
+    def __init__(self, tol: Union[float, int] = 10, min_trace_length: int = 15):
+        self.last_id = 0
+        self.min_trace_length = min_trace_length
         self.tol = tol
-        self.old_rectangle_set = None
+        self.traces: Dict[int, List[Rectangle]] = defaultdict(list)
+        self.active_traces: Set[int] = set()
 
-    def rectangles_in_action_zone(self, rectangles: List[Rectangle]) -> List[Rectangle]:
-        """Returns the rectangles that are in the action zone and adds them to the tracked objects.
+    @property
+    def car_counter(self) -> int:
+        return len([trace for trace in self.traces.values() if len(trace) >= self.min_trace_length])
 
-        A rectangle is in the action zone if its top left corner and bottom right corner are in the action zone.
+    def _set_car_id(self, car: Rectangle) -> int:
+        """Returns the id of the car."""
+        old_cars = [self.traces[trace_id][-1] for trace_id in self.active_traces]
+        distances = [car.distance_to(old_car) for old_car in old_cars]
+        potential_candidates = [(trace_id, distance) for trace_id, distance in zip(self.active_traces, distances)
+                                if distance <= self.tol]
+        if not potential_candidates:
+            self.last_id += 1
+            self.active_traces.add(self.last_id)
+            return self.last_id
+        trace_id, _ = min(potential_candidates, key=lambda x: x[1])
+        return trace_id
+
+    def track_cars(self, new_rectangles_set) -> List[Tuple[Rectangle, Rectangle]]:
+        """Tracks the cars in the action zone.
 
         Args:
-            rectangles: the rectangles to check
+            new_rectangles_set: the new rectangles to track
         """
-        rectangles = [rectangle for rectangle in rectangles if self._rectangle_in_action_zone(rectangle)]
-        self.tracked_objects.extend(rectangles)
-        return rectangles
+        active_traces = set()
+        for car in new_rectangles_set:
+            trace_id = self._set_car_id(car)
+            active_traces.add(trace_id)
+            self.traces[trace_id].append(car)
 
-    def _rectangle_in_action_zone(self, rectangle: Rectangle) -> bool:
-        """A rectangle is in the action zone if its top left corner and bottom right corner are in the action zone."""
-        x, y, w, h = rectangle
-        return (x, y) in self.action_zone and (x + w, y + h) in self.action_zone
+        self.active_traces = active_traces
 
-    def _get_distance(self, rectangle1, rectangle2):
-        return ((rectangle1.x - rectangle2.x)**2 + (rectangle1.y - rectangle2.y)**2)**0.5
-
-    def track_cars(self, new_rectangles_set):
-        # old_rectangles_set: Coches en frame anterior al actual
-        # new_rectangles_set: Coches en frame actual
-        relations = []
-        if old_rectangle_set != None:
-            for car in new_rectangles_set:
-                distances = [self._get_distance(car, old_car) for old_car in old_rectangles_set]
-                potential_candidates = list(filter(lambda x: x <= self.tol, distances))
-                if potential_candidates != []:
-                    potential_candidates.sort()
-                    old_me = potential_candidates[0]
-                    relations.append((old_me.center, car.center))
-
-        self.old_rectangle_set = new_rectangles_set
-        return relations
-
-
-
-
-
-
-
-
-
-
-
-
+        return [self.traces[trace_id] for trace_id in self.active_traces]
