@@ -35,6 +35,8 @@ class Processor:
             h = h if h is not None else self.video.frame_height - y
             self.action_zone = Rectangle(x, y, w, h)
 
+        self.tracker = Tracker(self.action_zone)
+
     def _set_action_zone(self, video_dim: Tuple[int, int]):
         if self.action_zone is None:
             self.action_zone = Rectangle(0, 125, video_dim[0], video_dim[1] - 125)
@@ -44,21 +46,28 @@ class Processor:
             h = h if h is not None else video_dim[1] - y
             self.action_zone = Rectangle(x, y, w, h)
 
-    def _draw_scene(self, frame: Frame, cars_in_action_zone: List[Rectangle]):
+    def _draw_scene(self, frame: Frame, cars_in_action_zone: List[Rectangle], traces: List[List[Rectangle]]):
         frame.draw_rectangles([car_in_action_zone for car_in_action_zone in cars_in_action_zone
                                if "car" in car_in_action_zone.label])
         frame.draw_rectangle(self.action_zone, color=(0, 255, 0))
-
         frame.draw_text(f"Car counter: {len(cars_in_action_zone)}", (70, 20))
+
+        for trace in traces:
+            points = [rectangle.center for rectangle in trace]
+            for i, point in enumerate(points):
+                if i == 0:
+                    continue
+                frame.draw_line(points[i - 1], point, color=(0, 0, 255))
 
     def process_video(self) -> Video:
         """Processes the video and returns new video with detected cars."""
 
-        new_video = deepcopy(self.video)
-        rectangles_in_video = self.car_detector.detect(new_video)
+        new_frames = [deepcopy(frame) for frame in self.video]
+        rectangles_in_video = self.car_detector.detect(self.video)
 
         for idx, rectangles in enumerate(tqdm.tqdm(rectangles_in_video)):
-            car_rectangles = [rectangle for rectangle in rectangles.rectangles if "car" in rectangle.label.lower()]
-            self._draw_scene(new_video[idx], car_rectangles)
+            car_rectangles = [rectangle for rectangle in rectangles if "car" in rectangle.label.lower()]
+            traces: List[List[Rectangle]] = self.tracker.track_cars(car_rectangles)
+            self._draw_scene(new_frames[idx], car_rectangles, traces)
 
-        return new_video
+        return Video(frames=new_frames, fps=self.video.fps)

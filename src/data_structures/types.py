@@ -48,6 +48,10 @@ class Rectangle:
     height: int
     label: str = ""
 
+    @property
+    def center(self) -> Point:
+        return self.x + self.width // 2, self.y + self.height // 2
+
     def __iter__(self):
         return iter((self.x, self.y, self.width, self.height))
 

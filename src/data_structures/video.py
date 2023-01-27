@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import time
 import cv2
 
@@ -7,15 +7,26 @@ from .frame import Frame
 
 class Video:
 
-    def __init__(self, path: str):
+    def __init__(self, path: str = "", frames: Optional[List[Frame]] = None, fps: int = 30):
         self.path = path
-        self.video_capture: cv2.VideoCapture = cv2.VideoCapture(path)
-        self.fps = self.video_capture.get(cv2.CAP_PROP_FPS)
-        self.frames: List[Frame] = None
-        self.frame_width = int(self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.frame_height = int(self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.size = (self.frame_width, self.frame_height)
-        self._set_frames()
+        if path:
+            self.video_capture: cv2.VideoCapture = cv2.VideoCapture(path)
+            self.fps = self.video_capture.get(cv2.CAP_PROP_FPS)
+            self.frames: List[Frame] = None
+            self.frame_width = int(self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+            self.frame_height = int(self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            self._set_frames()
+        elif frames is not None:  # Create video from list of frames
+            self.video_capture = None
+            self.fps = fps
+            self.frames = frames
+            frame_0 = frames[0]
+            self.frame_height = frame_0.height
+            self.frame_width = frame_0.width
+
+    @property
+    def size(self):
+        return self.frame_width, self.frame_height
 
     def _set_frames(self) -> None:
         self.frames = []

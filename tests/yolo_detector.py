@@ -22,8 +22,8 @@ def main():
     # # show image
     # frame.show()
 
-    processor = Processor(car_detector)
-    video = processor.process_video("data/video.avi")
+    processor = Processor(car_detector, video_path="data/video.avi")
+    video = processor.process_video()
     video.visualize()
     video.save("data/new_video_yolo.avi")
 

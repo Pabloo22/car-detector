@@ -24,7 +24,7 @@ class YoloDetector(CarDetector):
 
     def detect(self, video: Video) -> List[List[Rectangle]]:
         images = [frame.image for frame in video.frames]
-        results = self.model(images)
+        results = self.model.forward(images)
         return [self._parse_results(result) for result in results]
 
     def detect_frame(self, frame: Frame) -> List[Rectangle]:
