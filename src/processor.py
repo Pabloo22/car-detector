@@ -3,7 +3,7 @@ from typing import Tuple, Optional
 import tqdm
 
 from src.car_detectors.car_detector import CarDetector
-from src.data_types import Video, Rectangle
+from src.data_structures import Video, Rectangle
 from src.tracker import Tracker
 
 

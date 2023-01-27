@@ -3,7 +3,7 @@ from typing import List
 import torch
 
 from src.car_detectors.car_detector import CarDetector
-from src.data_types import Frame, Rectangle
+from src.data_structures import Frame, Rectangle
 
 
 class YoloDetector(CarDetector):

@@ -1,6 +1,6 @@
 from typing import List, Protocol
 
-from src.data_types import Frame, Rectangle
+from src.data_structures import Frame, Rectangle
 
 
 class CarDetector(Protocol):

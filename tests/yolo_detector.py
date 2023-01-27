@@ -1,7 +1,7 @@
-import cv2
+# import cv2
 
 from src.car_detectors import YoloDetector
-from src.data_types import Frame
+# from src.data_structures import Frame
 from src import Processor
 
 

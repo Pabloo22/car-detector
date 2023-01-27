@@ -1,6 +1,6 @@
 from typing import List
 
-from src.data_types import Rectangle
+from src.data_structures import Rectangle
 
 
 class Tracker:
