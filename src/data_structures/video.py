@@ -60,5 +60,8 @@ class Video:
     def __iter__(self):
         return iter(self.frames)
 
+    def __getitem__(self, item: int) -> Frame:
+        return self.frames[item]
+
     def __len__(self):
         return len(self.frames)

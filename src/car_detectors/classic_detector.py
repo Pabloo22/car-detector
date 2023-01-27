@@ -5,7 +5,7 @@ from copy import deepcopy
 import numpy as np
 
 from . import CarDetector
-from src.data_structures import Frame, Rectangle
+from src.data_structures import Frame, Rectangle, Video
 
 
 class ClassicDetector(CarDetector):
@@ -19,7 +19,10 @@ class ClassicDetector(CarDetector):
         self.min_area = min_area
         self.last_frame = None
 
-    def detect(self, frame: Frame) -> List[Rectangle]:
+    def detect(self, video: Video) -> List[List[Rectangle]]:
+        return [self.detect_frame(frame) for frame in video.frames]
+
+    def detect_frame(self, frame: Frame) -> List[Rectangle]:
         rectangles = self._detect(self.last_frame.image, frame.image) if self.last_frame is not None else []
         self.last_frame = deepcopy(frame)
         return rectangles
