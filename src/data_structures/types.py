@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 from dataclasses import dataclass
 
@@ -61,9 +61,26 @@ class Rectangle:
     def __len__(self):
         return 4
 
-    def __contains__(self, item: Tuple[int, int]):
+    def __contains__(self, item: Union[Tuple[int, int], "Rectangle"]):
+        if isinstance(item, Rectangle):
+            x, y, w, h = item
+            return (x, y) in self and (x + w, y + h) in self
+
         x, y = item
         return self.x <= x <= self.x + self.width and self.y <= y <= self.y + self.height
+
+    def distance_to(self, other: "Rectangle") -> float:
+        """Computes the distance between the center of this rectangle and the center of the other rectangle
+
+        Args:
+            other: the other rectangle
+
+        Returns:
+            the distance between the centers of the rectangles
+        """
+        x1, y1 = self.center
+        x2, y2 = other.center
+        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
 
 if __name__ == "__main__":

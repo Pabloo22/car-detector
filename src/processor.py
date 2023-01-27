@@ -65,8 +65,10 @@ class Processor:
         new_frames = [deepcopy(frame) for frame in self.video]
         rectangles_in_video = self.car_detector.detect(self.video)
 
-        for idx, rectangles in enumerate(tqdm.tqdm(rectangles_in_video)):
-            car_rectangles = [rectangle for rectangle in rectangles if "car" in rectangle.label.lower()]
+        for idx, rectangles in enumerate(rectangles_in_video):
+            rectangles_in_action_zone = [rectangle for rectangle in rectangles if rectangle in self.action_zone]
+            car_rectangles = [rectangle for rectangle in rectangles_in_action_zone
+                              if "car" in rectangle.label.lower()]
             traces: List[List[Rectangle]] = self.tracker.track_cars(car_rectangles)
             self._draw_scene(new_frames[idx], car_rectangles, traces)
 
