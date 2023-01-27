@@ -23,9 +23,9 @@ def main():
     # frame.show()
 
     processor = Processor(car_detector, video_path="data/video.avi")
-    video = processor.process_video()
+    video = processor.process_video(n_jobs=-1)
     video.visualize()
-    video.save("data/new_video_yolo.avi")
+    video.save("data/new_video_yolo_counting.avi")
 
 
 if __name__ == "__main__":

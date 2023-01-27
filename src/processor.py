@@ -1,7 +1,7 @@
 from typing import Tuple, Optional, List, Union
 
-import tqdm
 from copy import deepcopy
+import multiprocessing
 
 from src.car_detectors.car_detector import CarDetector
 from src.data_structures import Video, Rectangle, Frame
@@ -23,7 +23,7 @@ class Processor:
                  car_detector: CarDetector,
                  video_path: str,
                  action_zone: Optional[Union[Tuple[int, int, Optional[int], Optional[int]], Rectangle]] = None,
-                 tol: Union[float, int] = 10):
+                 tracker: Optional[Tracker] = None):
         self.car_detector = car_detector
         self.video = Video(video_path)
         self.action_zone = action_zone
@@ -36,7 +36,7 @@ class Processor:
             h = h if h is not None else self.video.frame_height - y
             self.action_zone = Rectangle(x, y, w, h)
 
-        self.tracker = Tracker(tol=tol)
+        self.tracker = Tracker() if tracker is None else tracker
 
     def _set_action_zone(self, video_dim: Tuple[int, int]):
         if self.action_zone is None:
@@ -60,11 +60,14 @@ class Processor:
                     continue
                 frame.draw_line(points[i - 1], point, color=(0, 0, 255))
 
-    def process_video(self) -> Video:
+    def process_video(self, n_jobs: int = 1) -> Video:
         """Processes the video and returns new video with detected cars."""
-
+        n_jobs = n_jobs if n_jobs > 0 else multiprocessing.cpu_count()
         new_frames = [deepcopy(frame) for frame in self.video]
-        rectangles_in_video = self.car_detector.detect(self.video)
+        # rectangles_in_video = self.car_detector.detect(self.video)
+        # Using multiprocessing to speed up the detection
+        with multiprocessing.Pool(n_jobs) as pool:
+            rectangles_in_video = pool.map(self.car_detector.detect_frame, new_frames)
 
         for idx, rectangles in enumerate(rectangles_in_video):
             rectangles_in_action_zone = [rectangle for rectangle in rectangles if rectangle in self.action_zone]
