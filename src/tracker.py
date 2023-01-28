@@ -6,9 +6,16 @@ from src.data_structures import Rectangle
 
 
 class Tracker:
-    """This class keeps track of the objects that are in the action zone."""
+    """This class keeps track of the objects that are in the action zone.
 
-    def __init__(self, tol: Union[float, int] = 10, min_trace_length: int = 15):
+    In particular, it keeps track of the traces of the objects and assigns an id to each object.
+
+    Args:
+        tol: tolerance for the distance between the center of two rectangles to be considered the same object.
+        min_trace_length: minimum length of a trace to be considered a car.
+    """
+
+    def __init__(self, tol: Union[float, int] = 10, min_trace_length: int = 10):
         self.last_id = 0
         self.min_trace_length = min_trace_length
         self.tol = tol
@@ -27,16 +34,16 @@ class Tracker:
                                 if distance <= self.tol]
         if not potential_candidates:
             self.last_id += 1
-            self.active_traces.add(self.last_id)
             return self.last_id
         trace_id, _ = min(potential_candidates, key=lambda x: x[1])
         return trace_id
 
-    def track_cars(self, new_rectangles_set) -> List[Tuple[Rectangle, Rectangle]]:
-        """Tracks the cars in the action zone.
+    def track_cars(self, new_rectangles_set) -> List[List[Rectangle]]:
+        """Returns a
 
         Args:
             new_rectangles_set: the new rectangles to track
+
         """
         active_traces = set()
         for car in new_rectangles_set:

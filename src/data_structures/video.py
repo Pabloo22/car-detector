@@ -6,6 +6,18 @@ from .frame import Frame
 
 
 class Video:
+    """Class for handling videos.
+
+    It can be created from a path to a video or from a list of frames.
+
+    Args:
+        path: the path to the video. Defaults to "".
+        frames: the frames to create the video from. Defaults to None.
+        fps: the frames per second of the video. Only used if frames is not None. Defaults to 30.
+
+    Raises:
+        ValueError: if neither path nor frames is set
+    """
 
     def __init__(self, path: str = "", frames: Optional[List[Frame]] = None, fps: int = 30):
         self.path = path
@@ -23,6 +35,8 @@ class Video:
             frame_0 = frames[0]
             self.frame_height = frame_0.height
             self.frame_width = frame_0.width
+        else:
+            raise ValueError("Either path or frames must be set.")
 
     @property
     def size(self):

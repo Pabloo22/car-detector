@@ -49,7 +49,7 @@ class Processor:
 
     def _draw_scene(self, frame: Frame, cars_in_action_zone: List[Rectangle], traces: List[List[Rectangle]]):
         frame.draw_rectangles([car_in_action_zone for car_in_action_zone in cars_in_action_zone
-                               if "car" in car_in_action_zone.label])
+                               if "car" in car_in_action_zone.label], draw_labels=True)
         frame.draw_rectangle(self.action_zone, color=(0, 255, 0))
         frame.draw_text(f"Car counter: {self.tracker.car_counter}", (70, 20))
 

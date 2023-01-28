@@ -1,3 +1,4 @@
+"""Contains the definition of the Rectangle class and of the Point and Color types"""
 from typing import Tuple, Union
 
 from dataclasses import dataclass
@@ -7,7 +8,7 @@ Point = Tuple[int, int]
 Color = Tuple[int, int, int]
 
 
-@dataclass
+@dataclass(frozen=True)
 class Rectangle:
     """A rectangle defined by its top left corner and its width and height
 

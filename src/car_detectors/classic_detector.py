@@ -9,20 +9,36 @@ from src.data_structures import Frame, Rectangle, Video
 
 
 class ClassicDetector(CarDetector):
-    """Classical car detector based on difference between two frames
+    """Classical car detector based on difference between two frames.
 
     Args:
         min_area: minimum area of a rectangle to be considered a car
     """
 
-    def __init__(self, min_area: int = 20):
+    def __init__(self, min_area: int = 800):
         self.min_area = min_area
         self.last_frame = None
 
     def detect(self, video: Video) -> List[List[Rectangle]]:
+        """Detects cars in a video.
+
+        Args:
+            video: the video to detect cars in.
+
+        Returns:
+            A list of lists of rectangles. Each list of rectangles represents a frame.
+        """
         return [self.detect_frame(frame) for frame in video.frames]
 
     def detect_frame(self, frame: Frame) -> List[Rectangle]:
+        """Detects cars in a frame.
+
+        Args:
+            frame: the frame to detect cars in.
+
+        Returns:
+            A list of rectangles.
+        """
         rectangles = self._detect(self.last_frame.image, frame.image) if self.last_frame is not None else []
         self.last_frame = deepcopy(frame)
         return rectangles

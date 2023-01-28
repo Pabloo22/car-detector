@@ -9,6 +9,11 @@ from .types import Point, Color, Rectangle
 
 @dataclass
 class Frame:
+    """A frame of a video.
+
+    Args:
+        image: the image of the frame as a numpy array with shape (height, width, 3)
+    """
 
     image: np.ndarray
     width: int = field(init=False)
@@ -20,31 +25,37 @@ class Frame:
     def draw_rectangles(self,
                         rectangles: List[Rectangle],
                         color: Color = (205, 255, 0),
-                        thickness: int = 2):
+                        thickness: int = 2,
+                        draw_labels: bool = False):
         """Draws the rectangles on the frame.
 
-                Args:
-                    rectangles: the rectangles to draw
-                    color: the color of the rectangles. Defaults to (205, 255, 0) (blue).
-                    thickness: the thickness of the rectangles. Defaults to 2.
+            Args:
+                rectangles: the rectangles to draw
+                color: the color of the rectangles. Defaults to (205, 255, 0) (blue).
+                thickness: the thickness of the rectangles. Defaults to 2.
+                draw_labels: whether to draw the labels of the rectangles. Defaults to False.
         """
         for rectangle in rectangles:
-            x, y, w, h = rectangle
-            cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)
+            self.draw_rectangle(rectangle, color, thickness, draw_labels)
 
     def draw_rectangle(self,
                        rectangle: Rectangle,
                        color: Color = (0, 255, 0),
-                       thickness: int = 1):
+                       thickness: int = 1,
+                       draw_label: bool = False):
         """Draws the rectangle on the frame.
 
         Args:
             rectangle: the rectangle to draw
             color: the color of the rectangle. Defaults to (0, 255, 0) (green).
             thickness: the thickness of the rectangle. Defaults to 1.
+            draw_label: whether to draw the label of the rectangle. Defaults to False.
         """
         x, y, w, h = rectangle
         cv2.rectangle(self.image, (x, y), (x + w, y + h), color, thickness)
+        if draw_label:
+            text_thickness = max(1, thickness - 1)
+            cv2.putText(self.image, rectangle.label, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, text_thickness)
 
     def draw_text(self,
                   text: str,
