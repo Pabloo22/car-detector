@@ -43,6 +43,10 @@ class Video:
         return self.frame_width, self.frame_height
 
     def _set_frames(self) -> None:
+        """Sets the frames of the video.
+
+        It is called when the video is created from a path.
+        """
         self.frames = []
         while self.video_capture.isOpened():
             ret, frame = self.video_capture.read()

@@ -43,7 +43,16 @@ class ClassicDetector(CarDetector):
         self.last_frame = deepcopy(frame)
         return rectangles
 
-    def _detect(self, frame1, frame2):
+    def _detect(self, frame1: np.ndarray, frame2: np.ndarray) -> List[Rectangle]:
+        """
+        Primero, hemos tomado dos frames del video, los pasamos a escala de grises y realizamos la diferencia entre
+        estos fotogramas. De esta forma capturamos el movimiento de un frame a otro.
+        Luego, con el resultado de esa diferencia apreciamos los coches en blanco, por lo que con un filtro de unos
+        de dimensiones 5x5 realizamos una dilatación a la imagen para obtener estructuras cuadradas en vez de coches,
+        y capturamos de esta forma todos los píxeles separados y que queden unidos. A continuación, aplicamos un blur
+        a la imagen para eliminar los píxeles diminutos que existan en la imagen y suavizar los bordes. Por último,
+        detectamos el contorno de las 'manchas blancas' y dibujamos un cuadrado alrededor.
+        """
         gray_a = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
         gray_b = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
         diff_image = cv2.absdiff(gray_b, gray_a)

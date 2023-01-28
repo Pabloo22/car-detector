@@ -9,7 +9,7 @@ from src.tracker import Tracker
 
 
 class Processor:
-    """Facade class to simplify the use of the application.
+    """Processes a video to detect cars and track them.
 
     Args:
         car_detector: the car detector to use
@@ -61,7 +61,13 @@ class Processor:
                 frame.draw_line(points[i - 1], point, color=(0, 0, 255))
 
     def process_video(self, n_jobs: int = 1) -> Video:
-        """Processes the video and returns new video with detected cars."""
+        """Processes the video and returns new video with detected cars.
+        Args:
+            n_jobs: the number of jobs to use for multiprocessing. If set to 1, no multiprocessing is used.
+
+        Returns:
+            A new video with detected cars.
+        """
         n_jobs = n_jobs if n_jobs > 0 else multiprocessing.cpu_count()
         new_frames = [deepcopy(frame) for frame in self.video]
         # rectangles_in_video = self.car_detector.detect(self.video)

@@ -13,9 +13,9 @@ from src import Processor, Tracker
 from src.car_detectors import ClassicDetector, YoloDetector
 
 # Ruta al video de prueba utilizado
-RUTA_VIDEO = 'demo/data/video.avi'
-RUTA_NUEVO_VIDEO_CLASSIC = 'demo/data/new_video_classic_detector.avi'
-RUTA_NUEVO_VIDEO_YOLO = 'demo/data/new_video_yolo_detector.avi'
+RUTA_VIDEO = 'data/video.avi'
+RUTA_NUEVO_VIDEO_CLASSIC = 'data/new_video_classic_detector.avi'
+RUTA_NUEVO_VIDEO_YOLO = 'data/new_video_yolo_detector.avi'
 
 
 def detector_clasico():
@@ -39,7 +39,7 @@ def detector_clasico():
     new_video = app.process_video(n_jobs=1)
 
     # Guardamos el video
-    # new_video.save(RUTA_NUEVO_VIDEO)
+    new_video.save(RUTA_NUEVO_VIDEO_CLASSIC)
 
     # Visualizamos el video generado
     new_video.visualize()

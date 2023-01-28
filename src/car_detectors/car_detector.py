@@ -6,7 +6,7 @@ from src.data_structures import Rectangle, Video, Frame
 
 
 class CarDetector(abc.ABC):
-    """Base class for car detectors"""
+    """Base class for all car detectors"""
 
     def detect(self, video: Video) -> List[List[Rectangle]]:
         """Detects cars in a video.
