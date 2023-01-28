@@ -4,24 +4,24 @@ Autores: Pablo Ariño y Jorge de la Rosa
 Fecha: 28/01/2023
 
 
-A  continuación  presentamos una libreria de detección de coches e n un  video. Para ello, hemos  empleado
+A  continuación  presentamos una libreria de detección de coches en un  video. Para ello, hemos  empleado
 dos métodos: Un método clásico y un método con redes neuronales. Empezaremos explicando el método clásico.
 En el video generado resaltamos los coches y con una linea roja denotamos su recorrido en el vídeo.
 """
 
-from src import Processor
-from src.car_detectors import ClassicDetector
-from src.car_detectors import YoloDetector
+from src import Processor, Tracker
+from src.car_detectors import ClassicDetector, YoloDetector
 
 # Ruta al video de prueba utilizado
-RUTA_VIDEO = 'video.avi'
-RUTA_NUEVO_VIDEO = 'new_video_classic_detector.avi'
+RUTA_VIDEO = 'data/video.avi'
+RUTA_NUEVO_VIDEO_CLASSIC = 'data/new_video_classic_detector.avi'
+RUTA_NUEVO_VIDEO_YOLO = 'data/new_video_yolo_detector.avi'
 
 
 def detector_clasico():
     """
     __MÉTODO CLÁSICO__
-    Para el método  clasico  hemos hecho  lo siguiente. Primero,  hemos tomado dos frames del video, los pasamos a escala de
+    Para el método  clásico  hemos hecho  lo siguiente. Primero,  hemos tomado dos frames del video, los pasamos a escala de
     grises y realizamos la diferencia entre estos fotogramas.De esta forma capturamos el movimiento de un frame a otro.
     Luego, el resultado de esa diferencia  apreciamos los  coches en blanco, por lo que con un filtro de unos de dimensiones
     5x5 realizamos una dilatación a la imagen para obtener estructuras cuadradas en vez de coches, y  capturar de esta forma
@@ -55,19 +55,19 @@ def detector_yolo():
     """
     # Importamos el detector YOLOv5
     car_detector = YoloDetector()
-
+    tracker = Tracker(min_trace_length=12)
+    
     # Creamos un objeto Processor
-    app = Processor(car_detector, video_path=RUTA_VIDEO)
+    app = Processor(car_detector, video_path=RUTA_VIDEO, tracker=tracker)
 
     # Generamos el video procesado
     new_video = app.process_video(n_jobs=-1)
 
     # Guardamos el video
-    # new_video.save(RUTA_NUEVO_VIDEO)
+    new_video.save(RUTA_NUEVO_VIDEO_YOLO)
 
     # Visualizamos el video generado
     new_video.visualize()
-
 
 
 if __name__ == '__main__':
