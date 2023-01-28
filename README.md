@@ -19,9 +19,9 @@ datos que se servirán de las clases anteriormente mencionadas. En particular, s
 `Frame`, una clase `Video` y una clase `Rectangle`.
 
 ## ¿Cómo funciona?
-La detección de coches se aplica únicamente una "zona de acción" especificada previamente por el usuario.
+La detección de coches se aplica únicamente en una "zona de acción" especificada previamente por el usuario.
 
-Una vez cargado el vídeo, se envían los frames secuencialmente al detector de coches. Este detector 
+Una vez cargado el vídeo, se envían los frames secuencialmente\* al detector de coches. Este detector 
 devolverá una lista de rectángulos en los que ha detectado un coche por cada frame. Esta información 
 se pasa a la clase `Tracker` para que determine si se tratan de coches nuevos o si estaban previamente en 
 frames anteriores. En este último caso se devuelve cuál ha sido su traza para que pueda ser dibujada. 
@@ -32,7 +32,7 @@ un mínimo número de frames en los que debe aparecer un coche para sumar el con
 En el caso del detector clásico, se hace uso además de un tamaño mínimo de contorno que evita la detección 
 de objetos que no tienen el tamaño suficiente como para ser un coche.
 
-La implementación actual está pensada para ser utilizada mediante una CPU. Sin embargo, se ha hecho uso
+\*La implementación actual está pensada para ser utilizada mediante una CPU. Sin embargo, se ha hecho uso
 de la librería `multiprocessing` para que la detección de coches se pueda realizar en paralelo si la detección
 de coches no depende de la detección de coches en frames anteriores. En caso de disponer de una GPU se podría
 reducir el tiempo de detección de coches del detector YOLOv5 modificando ligeramente el código.
