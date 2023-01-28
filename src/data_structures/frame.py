@@ -4,7 +4,7 @@ import cv2
 from dataclasses import dataclass, field
 import numpy as np
 
-from .types import Point, Color, Rectangle
+from .rectangle import Point, Color, Rectangle
 
 
 @dataclass
